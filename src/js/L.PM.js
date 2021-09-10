@@ -17,6 +17,8 @@ import Toolbar from './Toolbar/L.PM.Toolbar';
 import Draw from './Draw/L.PM.Draw';
 import './Draw/L.PM.Draw.Marker';
 import './Draw/L.PM.Draw.Line';
+import './Draw/L.PM.Draw.AdvancedPolyline'
+import './Draw/L.PM.Draw.AdvancedPolygon'
 import './Draw/L.PM.Draw.Polygon';
 import './Draw/L.PM.Draw.Rectangle';
 import './Draw/L.PM.Draw.Circle';
@@ -32,6 +34,16 @@ import './Edit/L.PM.Edit.Rectangle';
 import './Edit/L.PM.Edit.Circle';
 import './Edit/L.PM.Edit.CircleMarker';
 import './Edit/L.PM.Edit.ImageOverlay';
+import './Edit/L.PM.Edit.AdvancedImageOverlay';
+import './Edit/L.PM.Edit.AdvancedPolyline';
+import './Edit/L.PM.Edit.AdvancedPolygon';
+
+import AdvancedImageOverlay from "./Layer/AdvancedImageOverlay";
+import AdvancedPolyline from "./Layer/AdvancedPolyline";
+import AdvancedPolygon from "./Layer/AdvancedPolygon";
+import MatrixUtil from "./MatrixUtil";
+import DomUtil from "./DomUtil";
+import TrigUtil from './TrigUtil';
 
 import '../css/layers.css';
 import '../css/controls.css';
@@ -48,6 +60,12 @@ L.PM = L.PM || {
   Edit,
   Utils,
   Matrix,
+  AdvancedImageOverlay,
+  AdvancedPolyline,
+  AdvancedPolygon,
+  MatrixUtil,
+  DomUtil,
+  TrigUtil,
   activeLang: 'en',
   optIn: false,
   initialize(options) {
@@ -84,6 +102,20 @@ L.PM = L.PM || {
 
     L.LayerGroup.addInitHook(initLayerGroup);
 
+    function initAdvancedPolygon() {
+      this.pm = undefined;
+
+      if (L.PM.optIn) {
+        if (this.options.pmIgnore === false) {
+          this.pm = new L.PM.Edit.AdvancedPolygon(this);
+        }
+      } else if (!this.options.pmIgnore) {
+        this.pm = new L.PM.Edit.AdvancedPolygon(this);
+      }
+    }
+
+    L.AdvancedPolygon.addInitHook(initAdvancedPolygon);
+
     function initMarker() {
       this.pm = undefined;
 
@@ -109,6 +141,20 @@ L.PM = L.PM || {
       }
     }
     L.CircleMarker.addInitHook(initCircleMarker);
+
+    function initAdvancedPolyline() {
+      this.pm = undefined;
+
+      if (L.PM.optIn) {
+        if (this.options.pmIgnore === false) {
+          this.pm = new L.PM.Edit.AdvancedPolyline(this);
+        }
+      } else if (!this.options.pmIgnore) {
+        this.pm = new L.PM.Edit.AdvancedPolyline(this);
+      }
+    }
+
+    L.AdvancedPolyline.addInitHook(initAdvancedPolyline);
 
     function initPolyline() {
       this.pm = undefined;
@@ -165,6 +211,20 @@ L.PM = L.PM || {
     }
 
     L.Circle.addInitHook(initCircle);
+
+    function initAdvancedImageOverlay() {
+      this.pm = undefined;
+
+      if (L.PM.optIn) {
+        if (this.options.pmIgnore === false) {
+          this.pm = new L.PM.Edit.AdvancedImageOverlay(this);
+        }
+      } else if (!this.options.pmIgnore) {
+        this.pm = new L.PM.Edit.AdvancedImageOverlay(this);
+      }
+    }
+
+    L.AdvancedImageOverlay.addInitHook(initAdvancedImageOverlay);
 
     function initImageOverlay() {
       this.pm = undefined;
